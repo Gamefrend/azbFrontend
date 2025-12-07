@@ -17,11 +17,14 @@ RUN rm -rf /usr/share/nginx/html/*
 # Copy React build output
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# Cloud Run sets PORT environment variable dynamically
+# Create entrypoint script
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'sed -i "s/listen 80;/listen ${PORT};/" /etc/nginx/conf.d/default.conf' >> /entrypoint.sh && \
+    echo 'exec nginx -g "daemon off;"' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Cloud Run expects the server to listen on $PORT
 ENV PORT=8080
 EXPOSE 8080
 
-# Update Nginx config to listen on $PORT
-RUN sed -i "s/listen 80;/listen ${PORT};/" /etc/nginx/conf.d/default.conf
-
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/entrypoint.sh"]
