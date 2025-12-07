@@ -17,9 +17,11 @@ RUN rm -rf /usr/share/nginx/html/*
 # Copy React build output
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# Cloud Run expects the server to listen on $PORT
-# Nginx listens on 80 by default, so we map env var PORT to 80
+# Cloud Run sets PORT environment variable dynamically
 ENV PORT=8080
 EXPOSE 8080
+
+# Update Nginx config to listen on $PORT
+RUN sed -i "s/listen 80;/listen ${PORT};/" /etc/nginx/conf.d/default.conf
 
 CMD ["nginx", "-g", "daemon off;"]
