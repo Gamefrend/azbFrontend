@@ -1,8 +1,10 @@
 import './App.css';
+import Auth from './auth';
 
 function App() {
   return (
     <div className="App">
+      {/*
       <header className="App-header">
         <img src={"https://storage.googleapis.com/azb-multimedia-bucket/Kirbson.jpg"} className="App-logo" alt="logo" />
         <p>
@@ -17,6 +19,9 @@ function App() {
           Learn React
         </a>
       </header>
+      */}
+
+      <Auth />
     </div>
   );
 }
