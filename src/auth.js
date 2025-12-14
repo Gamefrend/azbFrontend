@@ -1,42 +1,69 @@
-// Kurze Auth-Komponente: Registrierung per Firebase Email/Password.
-// Datei nutzt das `auth`-Objekt aus `src/config/firebase-config`.
 import { auth } from "./config/firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 
+// Auth-Komponente: Nur Login (kein automatisches Anlegen von Accounts mehr).
+
 export const Auth = () => {
-  // Lokale Eingabewerte für Email und Passwort
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  const [errorText, setErrorText] = useState("");
 
-  // Funktion, die bei Klick versucht, einen Nutzer zu registrieren.
-  // Verwendet Firebase Auth: createUserWithEmailAndPassword(auth, email, pw)
+  // signIn: versucht den Benutzer mit Email/Passwort anzumelden.
   const signIn = async () => {
+    setErrorText(""); // vorherige Fehler zurücksetzen
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User created!"); // bei Erfolg kurz loggen
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("Erfolgreich angemeldet");
     } catch (err) {
-      // Fehler z.B. bei ungültiger Email oder bereits existierendem Nutzer
+      const code = err?.code || "";
       console.error(err);
+
+      setErrorText("Anmeldung fehlgeschlagen.");
+      
     }
   };
 
-  // Minimaler JSX-Formularaufbau: zwei Inputs und ein Button.
-  // Inputs aktualisieren die lokalen States; Button ruft `signIn` auf.
+  // JSX: zentriertes Formular mit klaren deutschen Labels und Kommentaren.
   return (
-    <div>
-      <input
-        placeholder="Email..."
-        onChange={(e) => setEmail(e.target.value)}
-      />
+    <div className="auth-container">
+      <form
+        className="auth-form"
+        onSubmit={(e) => {
+          // Verhindere Seitenreload und starte Login
+          e.preventDefault();
+          signIn();
+        }}
+      >
+        <h2>Anmelden</h2>
 
-      <input
-        placeholder="Password..."
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <label htmlFor="email">E‑Mail</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="deine@beispiel.de"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-      <button onClick={signIn}>Sign In</button>
+        <label htmlFor="password">Passwort</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Passwort"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <button type="submit">Anmelden</button>
+
+        {/* Roter Fehlertext unter dem Formular, wenn etwas schief geht */}
+        {errorText && <div className="auth-error">{errorText}</div>}
+      </form>
     </div>
   );
 };
