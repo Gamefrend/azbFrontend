@@ -1,20 +1,36 @@
-# Stage 1: Build React
-FROM node:20-alpine AS builder
+# ----------------------------
+# 1. Build Stage
+# ----------------------------
+FROM node:20-alpine AS build
+
+# Arbeitsverzeichnis setzen
 WORKDIR /app
+
+# Nur die package.json und package-lock.json kopieren (für Caching)
 COPY package*.json ./
-RUN npm ci
+
+# Abhängigkeiten installieren
+RUN npm install --legacy-peer-deps
+
+# Quellcode kopieren
 COPY . .
+
+# React-App bauen (produziert den build-Ordner)
 RUN npm run build
 
-# Stage 2: Serve with nginx
-FROM nginx:1.25-alpine
-COPY --from=builder /app/build /usr/share/nginx/html
-COPY default.conf.template /etc/nginx/conf.d/default.conf.template
+# ----------------------------
+# 2. Production Stage
+# ----------------------------
+FROM nginx:alpine
 
-# Install envsubst
-RUN apk add --no-cache bash gettext
+# Nginx-Konfiguration anpassen, optional
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-ENV PORT=8080
+# Build-Dateien von Stage 1 kopieren
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Port, auf dem Cloud Run zuhört
 EXPOSE 8080
 
-CMD ["sh", "-c", "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+# Nginx im Vordergrund starten
+CMD ["nginx", "-g", "daemon off;"]
