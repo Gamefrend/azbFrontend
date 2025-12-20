@@ -11,7 +11,7 @@ FROM nginx:1.25-alpine
 COPY --from=builder /app/build /usr/share/nginx/html
 COPY default.conf.template /etc/nginx/conf.d/default.conf.template
 
-# Verwende envsubst um $PORT in nginx config zu ersetzen
+# Install envsubst
 RUN apk add --no-cache bash gettext
 
 ENV PORT=8080
