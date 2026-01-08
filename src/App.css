@@ -37,9 +37,9 @@
   }
 }
 
-/* Styles für die Auth-Komponente: zentriertes Formular und Fehlerhinweis */
+
 .auth-container {
-  min-height: 100vh; /* komplett zentrieren innerhalb des Viewports */
+  min-height: 100vh; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,7 +47,7 @@
 }
 
 .auth-form {
-  background: #ffffff; /* Weißer Karten-Hintergrund für guten Kontrast */
+  background: #ffffff; 
   border-radius: 8px;
   padding: 24px;
   width: 320px;
@@ -55,9 +55,9 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  color: #000; /* Texte schwarz anzeigen */
+  color: #000;
   box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  border: 1px solid #e6e6e6; /* dezente Umrandung sichtbar machen */
+  border: 1px solid #e6e6e6; 
 }
 
 .auth-form h2 {
@@ -68,18 +68,17 @@
 .auth-form label {
   font-size: 0.9rem;
   margin-bottom: 4px;
-  color: #000; /* Labels schwarz */
+  color: #000; 
 }
 
 .auth-form input {
   padding: 10px 12px;
   border-radius: 6px;
-  border: 1px solid #cccccc; /* sichtbare, dezente Grenze */
-  background: #fff; /* weißer Hintergrund in Inputs */
-  color: #000; /* Input-Text schwarz */
+  border: 1px solid #cccccc; 
+  background: #fff; 
+  color: #000; 
 }
 
-/* Platzhalterfarbe etwas dezenter */
 .auth-form input::placeholder {
   color: #9e9e9e;
 }
@@ -95,7 +94,7 @@
 }
 
 .auth-error {
-  color: #c0392b; /* dunkleres, gut sichtbares Rot auf weißem Hintergrund */
+  color: #c0392b;
   margin-top: 6px;
   font-size: 0.9rem;
   text-align: center;
@@ -236,4 +235,64 @@
   border: none;
   color: #6c757d;
   cursor: pointer;
+}
+
+.album-card {
+  position: relative; 
+}
+
+.album-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+  opacity: 0; 
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.album-card:hover .album-actions {
+  opacity: 1; 
+}
+
+.album-actions button {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 4px;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.album-actions button:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.back-btn {
+  margin-right: 1rem;
+  padding: 8px 16px;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #555;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.back-btn:hover {
+  background-color: #f8f9fa;
+  border-color: #bbb;
+  color: #000;
+  transform: translateX(-2px); 
+}
+
+.back-btn:active {
+  background-color: #e9ecef;
+  transform: translateX(0);
 }

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { db } from "../config/firebase-config";
-import { collection, addDoc, serverTimestamp, query, where, onSnapshot } from "firebase/firestore";
+import { 
+  collection, addDoc, serverTimestamp, query, where, 
+  onSnapshot, doc, updateDoc, deleteDoc 
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 const AlbumList = ({ user }) => {
@@ -39,6 +42,33 @@ const AlbumList = ({ user }) => {
     }
   };
 
+  const deleteAlbum = async (e, albumId) => {
+    e.stopPropagation(); // Verhindert, dass der Klick das Album öffnet
+    if (window.confirm("Möchtest du dieses Album wirklich unwiderruflich löschen?")) {
+      try {
+        await deleteDoc(doc(db, "album", albumId));
+        // Optional: Hier auch die 'accesses' Sub-Collection löschen
+      } catch (err) {
+        console.error("Fehler beim Löschen:", err);
+      }
+    }
+  };
+
+  const renameAlbum = async (e, albumId, aktuellerTitel) => {
+    e.stopPropagation(); // Verhindert das Öffnen des Albums
+    const neuerName = prompt("Neuer Name für das Album:", aktuellerTitel);
+    if (neuerName && neuerName.trim() !== "" && neuerName !== aktuellerTitel) {
+      try {
+        const albumRef = doc(db, "album", albumId);
+        await updateDoc(albumRef, {
+          titel: neuerName
+        });
+      } catch (err) {
+        console.error("Fehler beim Umbenennen:", err);
+      }
+    }
+  };
+
   return (
     <main className="content">
       <header className="content-header">
@@ -56,6 +86,20 @@ const AlbumList = ({ user }) => {
               className="album-card" 
               onClick={() => navigate(`/album/${album.id}`)}
             >
+              <div className="album-actions">
+            <button 
+              className="action-btn" 
+              onClick={(e) => renameAlbum(e, album.id, album.titel)}
+            >
+              ✏️
+            </button>
+            <button 
+              className="action-btn delete" 
+              onClick={(e) => deleteAlbum(e, album.id)}
+            >
+              🗑️
+            </button>
+          </div>
               <div className="album-placeholder">📁</div>
               <div className="album-info">
                 <h3>{album.titel}</h3>
@@ -93,3 +137,4 @@ const AlbumList = ({ user }) => {
 };
 
 export default AlbumList;
+
