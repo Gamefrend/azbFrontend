@@ -1,298 +1,563 @@
-.App {
-  text-align: center;
+/* =========================================
+   1. GLOBALE VARIABLEN & THEMES
+   ========================================= */
+:root {
+  --background-color: #fcfcfd;
+  --text-color: #1e293b;
+  --card-bg: #ffffff;
+  --border-color: #e2e8f0;
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+  --primary-btn-bg: #3b82f6;
+  --primary-btn-text: white;
+  --secondary-bg: #f1f5f9;
+  --secondary-text: #64748b;
+  --error-color: #ef4444;
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.06);
+  --empty-border: #cbd5e1;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.dark-theme {
+  --background-color: #1a1a2e;
+  --text-color: #e0e0e0;
+  --card-bg: #2c2c4a;
+  --border-color: #3a3a5a;
+  --navbar-bg: rgba(26, 26, 46, 0.7); /* Transparent für Partikel */
+  --primary-btn-bg: #5a67d8;
+  --primary-btn-text: white;
+  --secondary-bg: #3a3a5a;
+  --secondary-text: #a0aec0;
+  --error-color: #f87171;
+  --shadow: 0 4px 15px rgba(0,0,0,0.5);
+  --empty-border: #3a3a5a;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* =========================================
+   2. BASIS STYLES & HINTERGRUND
+   ========================================= */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
 }
 
-.App-header {
-  background-color: #282c34;
+/* Three.js Canvas Fix */
+canvas {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* =========================================
+   3. LAYOUT STRUKTUR
+   ========================================= */
+.app-container {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: transparent; 
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-.auth-container {
-  min-height: 100vh; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-
-.auth-form {
-  background: #ffffff; 
-  border-radius: 8px;
-  padding: 24px;
-  width: 320px;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  color: #000;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  border: 1px solid #e6e6e6; 
-}
-
-.auth-form h2 {
-  margin: 0 0 6px 0;
-  text-align: center;
-}
-
-.auth-form label {
-  font-size: 0.9rem;
-  margin-bottom: 4px;
-  color: #000; 
-}
-
-.auth-form input {
-  padding: 10px 12px;
-  border-radius: 6px;
-  border: 1px solid #cccccc; 
-  background: #fff; 
-  color: #000; 
-}
-
-.auth-form input::placeholder {
-  color: #9e9e9e;
-}
-
-.auth-form button {
-  padding: 10px 12px;
-  border: none;
-  border-radius: 6px;
-  background: #61dafb;
-  color: #000;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.auth-error {
-  color: #c0392b;
-  margin-top: 6px;
-  font-size: 0.9rem;
-  text-align: center;
-}
-
-.logout-btn {
-  margin-top: 20px;
-  padding: 8px 16px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.dashboard {
-  padding: 20px;
-}
-
-/* Layout & Sidebar */
-.dashboard-container {
-  display: flex;
-  min-height: 100vh;
-  background-color: #f8f9fa;
-}
-
-.sidebar {
-  width: 250px;
-  background-color: #ffffff;
-  border-right: 1px solid #e0e0e0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
+.main-layout {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: transparent;
 }
 
 .content {
   flex-grow: 1;
-  padding: 40px;
+  padding: 20px 0;
 }
 
 .content-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 2rem;
 }
 
-/* Album Grid */
-.album-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+.header-left {
+  display: flex;
+  align-items: center;
   gap: 20px;
 }
 
-.album-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  transition: transform 0.2s;
-  cursor: pointer;
+.title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.album-card:hover {
-  transform: translateY(-5px);
+.content-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--text-color);
+}
+
+/* =========================================
+   4. NAVBAR
+   ========================================= */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navbar-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: transform 0.2s ease;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+  font-weight: 500;
+}
+
+/* =========================================
+   5. BUTTONS
+   ========================================= */
+.primary-btn, .primary-btn-modern, .confirm-btn, .cta-btn-modern, .cta-upload-btn, .add-album-btn {
+  background: var(--primary-btn-bg);
+  color: var(--primary-btn-text);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.primary-btn:hover, .cta-btn-modern:hover, .cta-upload-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.back-btn, .back-btn-modern, .theme-toggle-btn, .logout-navbar-btn, .cancel-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.back-btn:hover, .theme-toggle-btn:hover {
+  background: var(--secondary-bg);
+}
+
+.logout-navbar-btn:hover {
+  background-color: var(--error-color);
+  color: white;
+}
+
+/* =========================================
+   6. ALBEN & FOTO GRID
+   ========================================= */
+.album-grid, .photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.album-card, .photo-card.modern {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow);
+}
+
+.album-card:hover, .photo-card.modern:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
 }
 
 .album-placeholder {
   height: 150px;
-  background-color: #e9ecef;
+  background-color: var(--secondary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 3rem;
 }
 
-.album-info {
-  padding: 15px;
-}
-
-.album-info h3 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.album-info p {
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-top: 5px;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  width: 400px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.modal-content input {
+.photo-card.modern img, .photo-card.modern video {
   width: 100%;
-  padding: 12px;
-  margin: 20px 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
+  height: 200px;
+  object-fit: cover;
+  display: block;
 }
 
-.modal-buttons {
+.photo-overlay, .album-actions {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.add-album-btn, .confirm-btn {
-  background-color: #61dafb;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.cancel-btn {
-  background: none;
-  border: none;
-  color: #6c757d;
-  cursor: pointer;
-}
-
-.album-card {
-  position: relative; 
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .album-actions {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  gap: 5px;
-  opacity: 0; 
-  transition: opacity 0.2s;
-  z-index: 10;
+  top: 10px; right: 10px; bottom: auto; left: auto;
+  background: transparent;
+  gap: 8px;
 }
 
+.photo-card:hover .photo-overlay,
 .album-card:hover .album-actions {
-  opacity: 1; 
+  opacity: 1;
 }
 
-.album-actions button {
-  background: rgba(255, 255, 255, 0.9);
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.photo-card.modern {
+  position: relative;
+  border-radius: 16px;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Der Lösch-Button oben rechts am Rand */
+.delete-mini-btn {
+  position: absolute;
+  top: 10px;      /* Kleiner Abstand zum oberen Rand */
+  right: 10px;    /* Kleiner Abstand zum rechten Rand */
+  background: var(--error-color);
+  color: white;
   border: none;
-  border-radius: 4px;
-  padding: 5px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 14px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.album-actions button:hover {
-  background: white;
-  transform: scale(1.1);
-}
-
-.back-btn {
-  margin-right: 1rem;
-  padding: 8px 16px;
-  background-color: transparent;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  color: #555;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
 }
 
-.back-btn:hover {
-  background-color: #f8f9fa;
-  border-color: #bbb;
-  color: #000;
-  transform: translateX(-2px); 
+.delete-mini-btn:hover {
+  transform: scale(1.15);
+  background: #dc2626; /* Etwas dunkleres Rot beim Hover */
 }
 
-.back-btn:active {
-  background-color: #e9ecef;
-  transform: translateX(0);
+/* Das "Vollbild" Label zentriert lassen */
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3); /* Etwas transparenter für bessere Sicht */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.photo-card.modern:hover .photo-overlay {
+  opacity: 1;
+}
+
+.zoom-label {
+  color: white;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* =========================================
+   7. MODALS (Alben erstellen etc.)
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 1500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+/* =========================================
+   8. LIGHTBOX (Vollbild-Anzeige)
+   ========================================= */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95); /* Sehr dunkler Hintergrund für Fokus */
+  backdrop-filter: blur(15px);     /* Stärkerer Blur-Effekt */
+  z-index: 2500;                   /* Über den Modals */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  animation: fadeIn 0.3s ease;
+}
+
+/* WICHTIG: Hier keinen Hintergrund oder Padding vergeben! */
+.lightbox-content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 95vw;
+  max-height: 95vh;
+  background: transparent; /* Verhindert die weiße Box um das Bild */
+  border: none;
+  cursor: default;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
+.close-lightbox {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 3000;
+}
+
+.close-lightbox:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg) scale(1.1);
+  border-color: white;
+}
+
+/* =========================================
+   8. ANIMATIONEN & EFFEKTE
+   ========================================= */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner, .loader {
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-btn-bg);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner { width: 16px; height: 16px; border-width: 2px; }
+.loader { width: 40px; height: 40px; margin: 20px auto; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.empty-state, .empty-state-modern {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  background: var(--card-bg);
+  border: 2px dashed var(--empty-border);
+  border-radius: 24px;
+  margin-top: 2rem;
+}
+
+.empty-state-icon, .empty-illustration {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* =========================================
+   9. AUTH FORMULAR & ZENTRIERUNG
+   ========================================= */
+.auth-container {
+  min-height: 100vh;      /* Nutzt die volle Höhe des Browsers */
+  display: flex;          /* Aktiviert Flexbox */
+  align-items: center;    /* Zentriert vertikal */
+  justify-content: center;/* Zentriert horizontal */
+  padding: 20px;
+  background-color: transparent; /* Damit Partikel im Hintergrund sichtbar bleiben */
+}
+
+.auth-form {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 40px;          /* Etwas mehr Platz im Inneren */
+  width: 100%;
+  max-width: 400px;       /* Maximale Breite des Formulars */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  backdrop-filter: blur(10px); /* Glas-Effekt passend zur Navbar */
+}
+
+.auth-form h2 {
+  margin: 0 0 10px 0;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.auth-form input {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--secondary-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--primary-btn-bg); /* Highlight bei Klick */
+}
+
+.auth-form button {
+  margin-top: 10px;
+  /* Nutzt automatisch die Stile von .primary-btn, falls die Klasse vergeben ist */
+}
+
+.google-btn-modern {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+}
+
+.google-btn-modern:hover {
+  background: var(--secondary-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.auth-error {
+  background-color: var(--error-color);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 10px 0;
+  width: 100%;
+}
+
+/* =========================================
+   10. RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+  .user-email { display: none; }
+  .navbar-content { padding: 0 10px; }
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  .content-header h1 { font-size: 1.5rem; }
 }

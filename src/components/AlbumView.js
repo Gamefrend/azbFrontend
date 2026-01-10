@@ -12,14 +12,15 @@ const AlbumView = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
+  
+  // State für die Vollbildansicht
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  // Album und Media laden
   useEffect(() => {
     const fetchData = async () => {
       try {
         const albumData = await api.getAlbum(albumId);
         setAlbum(albumData.album);
-
         const mediaData = await api.getMedia(albumId);
         setMedia(mediaData.media);
       } catch (err) {
@@ -36,138 +37,102 @@ const AlbumView = ({ user }) => {
     }
   }, [albumId, user, navigate]);
 
-  // Bilder hochladen
   const handleUpload = async (e) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-
     setUploading(true);
     setError(null);
 
     try {
       const result = await api.uploadMedia(albumId, Array.from(files));
-      setMedia([...result.media, ...media]);  // Neue Bilder vorne
+      setMedia([...result.media, ...media]);
     } catch (err) {
-      console.error("Upload fehlgeschlagen:", err);
       setError("Upload fehlgeschlagen");
     } finally {
       setUploading(false);
-      fileInputRef.current.value = '';  // Input zurücksetzen
+      fileInputRef.current.value = '';
     }
   };
 
-  // Bild löschen
-  const handleDelete = async (mediaId) => {
+  const handleDelete = async (e, mediaId) => {
+    e.stopPropagation(); // Verhindert, dass das Bild gleichzeitig geöffnet wird
     if (!window.confirm("Bild wirklich löschen?")) return;
-
     try {
       await api.deleteMedia(mediaId);
       setMedia(media.filter(m => m.id !== mediaId));
     } catch (err) {
-      console.error("Löschen fehlgeschlagen:", err);
       setError("Löschen fehlgeschlagen");
     }
   };
 
-  if (loading) return <main className="content"><p>Album wird geladen...</p></main>;
-  if (error && !album) return <main className="content"><p style={{color: 'red'}}>{error}</p></main>;
+  if (loading) return <main className="content"><div className="loader">Lade Album...</div></main>;
 
   const canEdit = ['owner', 'editor'].includes(album?.role);
 
   return (
-      <main className="content">
-        <header className="content-header">
-          <div className="header-left">
-            <button className="back-btn" onClick={() => navigate("/")}>← Zurück</button>
+    <main className="content">
+      <header className="content-header">
+        <div className="header-left">
+          <button className="back-btn" onClick={() => navigate("/")}>←</button>
+          <div className="title-group">
             <h1>{album?.title || "Album"}</h1>
-            <span style={{
-              background: album?.role === 'owner' ? '#4CAF50' : '#2196F3',
-              color: 'white',
-              padding: '2px 8px',
-              borderRadius: '4px',
-              fontSize: '0.8rem',
-              marginLeft: '10px'
-            }}>
-            {album?.role}
-          </span>
+            <span className={`role-badge ${album?.role}`}>{album?.role}</span>
           </div>
+        </div>
 
+        {canEdit && (
+          <div className="header-actions">
+            <input type="file" ref={fileInputRef} onChange={handleUpload} accept="image/*" multiple style={{ display: 'none' }} />
+            <button className="primary-btn" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+              {uploading ? '⏳ Lädt...' : '+ Foto hinzufügen'}
+            </button>
+          </div>
+        )}
+      </header>
+
+      {error && <div className="error-message">{error}</div>}
+
+      <section className="photo-section">
+        {media.length > 0 ? (
+          <div className="photo-grid">
+            {media.map(item => (
+            <div key={item.id} className="photo-card modern" onClick={() => setSelectedImage(item.url)}>
+              <img src={item.url} alt="Foto" loading="lazy" />
+              <div className="photo-overlay">
+                <span className="zoom-label">🔍 Vollbild</span>
+                {canEdit && (
+                  <button className="delete-mini-btn" onClick={(e) => handleDelete(e, item.id)}>✕</button>
+                )}
+              </div>
+            </div>
+          ))}
+          </div>
+        ) : (
+          <div className="empty-state">
+          <div className="empty-state-icon">📸</div>
+          <h2>Dein Album ist noch leer</h2>
+          <p>Lade deine ersten Fotos hoch, um dieses Album zum Leben zu erwecken.</p>
           {canEdit && (
-              <>
-                <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleUpload}
-                    accept="image/*"
-                    multiple
-                    style={{ display: 'none' }}
-                />
-                <button
-                    className="add-photo-btn"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                >
-                  {uploading ? '⏳ Uploading...' : '+ Foto hinzufügen'}
-                </button>
-              </>
+            <button className="cta-upload-btn" onClick={() => fileInputRef.current?.click()}>
+              <span className="plus-icon">+</span> Foto auswählen
+            </button>
           )}
-        </header>
+        </div>
+      )}
+    </section>
 
-        {error && <div style={{color: 'red', marginBottom: '1rem'}}>{error}</div>}
-
-        <section className="photo-section">
-          {media.length > 0 ? (
-              <div className="photo-grid" style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-                gap: '1rem'
-              }}>
-                {media.map(item => (
-                    <div key={item.id} className="photo-card" style={{
-                      position: 'relative',
-                      borderRadius: '8px',
-                      overflow: 'hidden',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                    }}>
-                      <img
-                          src={item.url}
-                          alt={item.filename || "Foto"}
-                          style={{
-                            width: '100%',
-                            height: '200px',
-                            objectFit: 'cover'
-                          }}
-                      />
-                      {canEdit && (
-                          <button
-                              onClick={() => handleDelete(item.id)}
-                              style={{
-                                position: 'absolute',
-                                top: '8px',
-                                right: '8px',
-                                background: 'rgba(255,0,0,0.8)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '30px',
-                                height: '30px',
-                                cursor: 'pointer'
-                              }}
-                          >
-                            ✕
-                          </button>
-                      )}
-                    </div>
-                ))}
-              </div>
-          ) : (
-              <div className="photo-grid-placeholder">
-                <p>Dieses Album ist noch leer.</p>
-                {canEdit && <p>Klicke auf "+ Foto hinzufügen" um Bilder hochzuladen.</p>}
-              </div>
-          )}
-        </section>
-      </main>
+      {/* Lightbox / Vollbild Modal */}
+      {selectedImage && (
+      <div className="lightbox" onClick={() => setSelectedImage(null)}>
+        {/* Button außerhalb des Inhalts, damit er immer oben rechts fixiert ist */}
+        <button className="close-lightbox" onClick={() => setSelectedImage(null)}>✕</button>
+        
+        <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+          <img src={selectedImage} alt="Vollbild" />
+        </div>
+      </div>
+    )}
+    </main>
   );
 };
 

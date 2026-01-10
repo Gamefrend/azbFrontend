@@ -87,10 +87,9 @@ export const Auth = () => {
               required
           />
 
-          <button type="submit">
+          <button type="submit" className="primary-btn" style={{ justifyContent: 'center' }}>
             {isRegistering ? "Jetzt Registrieren" : "Anmelden"}
           </button>
-
           <p
               style={{ fontSize: "0.8rem", textAlign: "center", cursor: "pointer", color: "#61dafb", marginTop: "10px" }}
               onClick={() => {
@@ -103,7 +102,8 @@ export const Auth = () => {
 
           <hr />
 
-          <button type="button" onClick={signInWithGoogle} className="google-btn">
+          <button type="button" onClick={signInWithGoogle} className="google-btn-modern">
+            <img src="/Google.png" alt="G" width="18" />
             Mit Google anmelden
           </button>
 
