@@ -46,7 +46,7 @@ function App() {
             {/* Hier wechselt der Inhalt je nach URL */}
             <Routes>
               <Route path="/" element={<AlbumList user={user} />} />
-              <Route path="/album/:albumId" element={<AlbumView />} />
+              <Route path="/album/:albumId" element={<AlbumView user={user} />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>
