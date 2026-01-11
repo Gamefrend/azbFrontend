@@ -137,26 +137,41 @@ const AlbumList = ({ user }) => {
         </div>
 
         {/* Modal */}
-        {showModal && (
-            <div className="modal-overlay">
-              <div className="modal-content">
-                <h2>Neues Album erstellen</h2>
-                <form onSubmit={createAlbum}>
-                  <input
-                      type="text"
-                      placeholder="Name des Albums"
-                      value={newAlbumName}
-                      onChange={(e) => setNewAlbumName(e.target.value)}
-                      autoFocus
-                  />
-                  <div className="modal-buttons">
-                    <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">Abbrechen</button>
-                    <button type="submit" className="confirm-btn">Erstellen</button>
-                  </div>
-                </form>
-              </div>
+       {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content modern-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setShowModal(false)}>✕</button>
+            
+            <div className="modal-header">
+              <h2>Neues Album</h2>
+              <p>Gib deinem Album einen Namen, um deine Medien zu organisieren.</p>
             </div>
-        )}
+
+            <form onSubmit={createAlbum}>
+              <div className="input-group">
+                <label>Album Name</label>
+                <input
+                  type="text"
+                  placeholder="z.B. Urlaub 2025"
+                  value={newAlbumName}
+                  onChange={(e) => setNewAlbumName(e.target.value)}
+                  autoFocus
+                  className="modern-input"
+                />
+              </div>
+              
+              <div className="modal-buttons">
+                <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">
+                  Abbrechen
+                </button>
+                <button type="submit" className="confirm-btn" disabled={!newAlbumName.trim()}>
+                  Album erstellen
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       </main>
   );
 };

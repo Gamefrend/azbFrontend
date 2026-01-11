@@ -359,6 +359,96 @@ canvas {
     box-shadow: var(--shadow);
 }
 
+.modern-modal {
+    max-width: 450px !important;
+    padding: 40px !important;
+    border-radius: 24px !important;
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    margin-bottom: 25px;
+}
+
+.modal-header h2 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    text-align: left !important;
+}
+
+.modal-header p {
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* Eingabefeld Optimierung */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 30px;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--secondary-text);
+    margin-left: 4px;
+}
+
+.modern-input {
+    width: 100%;
+    padding: 14px 18px !important;
+    border-radius: 14px !important;
+    border: 2px solid var(--border-color) !important;
+    background: var(--background-color) !important; 
+    color: var(--text-color) !important; 
+    font-size: 1rem !important;
+    box-sizing: border-box;
+    transition: all 0.2s ease !important;
+}
+
+.modern-input::placeholder {
+    color: var(--secondary-text);
+    opacity: 0.7;
+}
+
+.modern-input:focus {
+    border-color: var(--primary-btn-bg) !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+    outline: none;
+}
+
+/* Button Anordnung */
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.confirm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.cancel-btn {
+    border: none !important;
+    background: transparent !important;
+    font-weight: 600 !important;
+    padding: 12px 20px !important;
+}
+
+.cancel-btn:hover {
+    background: var(--secondary-bg) !important;
+}
+
 /* =========================================
    8. LIGHTBOX (Vollbild-Anzeige)
    ========================================= */
