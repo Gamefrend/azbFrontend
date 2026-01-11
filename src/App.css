@@ -2,562 +2,1131 @@
    1. GLOBALE VARIABLEN & THEMES
    ========================================= */
 :root {
-  --background-color: #fcfcfd;
-  --text-color: #1e293b;
-  --card-bg: #ffffff;
-  --border-color: #e2e8f0;
-  --navbar-bg: rgba(255, 255, 255, 0.85);
-  --primary-btn-bg: #3b82f6;
-  --primary-btn-text: white;
-  --secondary-bg: #f1f5f9;
-  --secondary-text: #64748b;
-  --error-color: #ef4444;
-  --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.06);
-  --empty-border: #cbd5e1;
+    --background-color: #fcfcfd;
+    --text-color: #1e293b;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --navbar-bg: rgba(255, 255, 255, 0.85);
+    --primary-btn-bg: #3b82f6;
+    --primary-btn-text: white;
+    --secondary-bg: #f1f5f9;
+    --secondary-text: #64748b;
+    --error-color: #ef4444;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    --empty-border: #cbd5e1;
 }
 
 .dark-theme {
-  --background-color: #1a1a2e;
-  --text-color: #e0e0e0;
-  --card-bg: #2c2c4a;
-  --border-color: #3a3a5a;
-  --navbar-bg: rgba(26, 26, 46, 0.7); /* Transparent für Partikel */
-  --primary-btn-bg: #5a67d8;
-  --primary-btn-text: white;
-  --secondary-bg: #3a3a5a;
-  --secondary-text: #a0aec0;
-  --error-color: #f87171;
-  --shadow: 0 4px 15px rgba(0,0,0,0.5);
-  --empty-border: #3a3a5a;
+    --background-color: #1a1a2e;
+    --text-color: #e0e0e0;
+    --card-bg: #2c2c4a;
+    --border-color: #3a3a5a;
+    --navbar-bg: rgba(26, 26, 46, 0.7); /* Transparent für Partikel */
+    --primary-btn-bg: #5a67d8;
+    --primary-btn-text: white;
+    --secondary-bg: #3a3a5a;
+    --secondary-text: #a0aec0;
+    --error-color: #f87171;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    --empty-border: #3a3a5a;
 }
 
 /* =========================================
    2. BASIS STYLES & HINTERGRUND
    ========================================= */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
-  overflow-x: hidden;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
 }
 
 /* Three.js Canvas Fix */
 canvas {
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 
 /* =========================================
    3. LAYOUT STRUKTUR
    ========================================= */
 .app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: transparent; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: transparent;
 }
 
 .main-layout {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  background-color: transparent;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: transparent;
 }
 
 .content {
-  flex-grow: 1;
-  padding: 20px 0;
+    flex-grow: 1;
+    padding: 20px 0;
 }
 
 .content-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
 }
 
 .header-left {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .title-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .content-header h1 {
-  margin: 0;
-  font-size: 2rem;
-  color: var(--text-color);
+    margin: 0;
+    font-size: 2rem;
+    color: var(--text-color);
 }
 
 /* =========================================
    4. NAVBAR
    ========================================= */
 .navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--navbar-bg);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-color);
-  height: 70px;
-  display: flex;
-  align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navbar-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    height: 70px;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-content {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  transition: transform 0.2s ease;
+    font-size: 1.5rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: transform 0.2s ease;
 }
 
 .navbar-user {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .user-email {
-  font-size: 0.9rem;
-  color: var(--secondary-text);
-  font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    font-weight: 500;
 }
 
 /* =========================================
    5. BUTTONS
    ========================================= */
 .primary-btn, .primary-btn-modern, .confirm-btn, .cta-btn-modern, .cta-upload-btn, .add-album-btn {
-  background: var(--primary-btn-bg);
-  color: var(--primary-btn-text);
-  border: none;
-  padding: 12px 28px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    background: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .primary-btn:hover, .cta-btn-modern:hover, .cta-upload-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .back-btn, .back-btn-modern, .theme-toggle-btn, .logout-navbar-btn, .cancel-btn {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  color: var(--text-color);
-  font-weight: 500;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: var(--text-color);
+    font-weight: 500;
 }
 
 .back-btn:hover, .theme-toggle-btn:hover {
-  background: var(--secondary-bg);
+    background: var(--secondary-bg);
 }
 
 .logout-navbar-btn:hover {
-  background-color: var(--error-color);
-  color: white;
+    background-color: var(--error-color);
+    color: white;
 }
 
 /* =========================================
    6. ALBEN & FOTO GRID
    ========================================= */
 .album-grid, .photo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
 }
 
 .album-card, .photo-card.modern {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  cursor: pointer;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow);
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow);
 }
 
 .album-card:hover, .photo-card.modern:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 .album-placeholder {
-  height: 150px;
-  background-color: var(--secondary-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
+    height: 150px;
+    background-color: var(--secondary-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
 }
 
 .photo-card.modern img, .photo-card.modern video {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
 }
 
 .photo-overlay, .album-actions {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .album-actions {
-  top: 10px; right: 10px; bottom: auto; left: auto;
-  background: transparent;
-  gap: 8px;
+    top: 10px;
+    right: 10px;
+    bottom: auto;
+    left: auto;
+    background: transparent;
+    gap: 8px;
 }
 
 .photo-card:hover .photo-overlay,
 .album-card:hover .album-actions {
-  opacity: 1;
+    opacity: 1;
 }
 
 .photo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
 }
 
 .photo-card.modern {
-  position: relative;
-  border-radius: 16px;
-  aspect-ratio: 4/3;
-  overflow: hidden;
-  cursor: pointer;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border-radius: 16px;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Der Lösch-Button oben rechts am Rand */
 .delete-mini-btn {
-  position: absolute;
-  top: 10px;      /* Kleiner Abstand zum oberen Rand */
-  right: 10px;    /* Kleiner Abstand zum rechten Rand */
-  background: var(--error-color);
-  color: white;
-  border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: bold;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  transition: transform 0.2s;
+    position: absolute;
+    top: 10px; /* Kleiner Abstand zum oberen Rand */
+    right: 10px; /* Kleiner Abstand zum rechten Rand */
+    background: var(--error-color);
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
 }
 
 .delete-mini-btn:hover {
-  transform: scale(1.15);
-  background: #dc2626; /* Etwas dunkleres Rot beim Hover */
+    transform: scale(1.15);
+    background: #dc2626; /* Etwas dunkleres Rot beim Hover */
 }
 
 /* Das "Vollbild" Label zentriert lassen */
 .photo-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3); /* Etwas transparenter für bessere Sicht */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3); /* Etwas transparenter für bessere Sicht */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .photo-card.modern:hover .photo-overlay {
-  opacity: 1;
+    opacity: 1;
 }
 
 .zoom-label {
-  color: white;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 8px 16px;
-  border-radius: 20px;
-  backdrop-filter: blur(4px);
+    color: white;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
 }
 
 /* =========================================
    7. MODALS (Alben erstellen etc.)
    ========================================= */
 .modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  z-index: 1500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
-  background: var(--card-bg);
-  padding: 30px;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 400px;
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow);
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
 }
 
 /* =========================================
    8. LIGHTBOX (Vollbild-Anzeige)
    ========================================= */
 .lightbox {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.95); /* Sehr dunkler Hintergrund für Fokus */
-  backdrop-filter: blur(15px);     /* Stärkerer Blur-Effekt */
-  z-index: 2500;                   /* Über den Modals */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: zoom-out;
-  animation: fadeIn 0.3s ease;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95); /* Sehr dunkler Hintergrund für Fokus */
+    backdrop-filter: blur(15px); /* Stärkerer Blur-Effekt */
+    z-index: 2500; /* Über den Modals */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    animation: fadeIn 0.3s ease;
 }
 
 /* WICHTIG: Hier keinen Hintergrund oder Padding vergeben! */
 .lightbox-content {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 95vw;
-  max-height: 95vh;
-  background: transparent; /* Verhindert die weiße Box um das Bild */
-  border: none;
-  cursor: default;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 95vw;
+    max-height: 95vh;
+    background: transparent; /* Verhindert die weiße Box um das Bild */
+    border: none;
+    cursor: default;
 }
 
 .lightbox-content img {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-  border-radius: 4px;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
 }
 
 .close-lightbox {
-  position: fixed;
-  top: 30px;
-  right: 30px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 3000;
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 3000;
 }
 
 .close-lightbox:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg) scale(1.1);
-  border-color: white;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg) scale(1.1);
+    border-color: white;
 }
 
 /* =========================================
    8. ANIMATIONEN & EFFEKTE
    ========================================= */
 @keyframes spin {
-  to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .spinner, .loader {
-  border: 4px solid var(--border-color);
-  border-top: 4px solid var(--primary-btn-bg);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--primary-btn-bg);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-.spinner { width: 16px; height: 16px; border-width: 2px; }
-.loader { width: 40px; height: 40px; margin: 20px auto; }
+.spinner {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+}
+
+.loader {
+    width: 40px;
+    height: 40px;
+    margin: 20px auto;
+}
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .empty-state, .empty-state-modern {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 20px;
-  text-align: center;
-  background: var(--card-bg);
-  border: 2px dashed var(--empty-border);
-  border-radius: 24px;
-  margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    text-align: center;
+    background: var(--card-bg);
+    border: 2px dashed var(--empty-border);
+    border-radius: 24px;
+    margin-top: 2rem;
 }
 
 .empty-state-icon, .empty-illustration {
-  font-size: 4rem;
-  margin-bottom: 1.5rem;
-  animation: float 3s ease-in-out infinite;
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
 }
 
 /* =========================================
    9. AUTH FORMULAR & ZENTRIERUNG
    ========================================= */
 .auth-container {
-  min-height: 100vh;      /* Nutzt die volle Höhe des Browsers */
-  display: flex;          /* Aktiviert Flexbox */
-  align-items: center;    /* Zentriert vertikal */
-  justify-content: center;/* Zentriert horizontal */
-  padding: 20px;
-  background-color: transparent; /* Damit Partikel im Hintergrund sichtbar bleiben */
+    min-height: 100vh; /* Nutzt die volle Höhe des Browsers */
+    display: flex; /* Aktiviert Flexbox */
+    align-items: center; /* Zentriert vertikal */
+    justify-content: center; /* Zentriert horizontal */
+    padding: 20px;
+    background-color: transparent; /* Damit Partikel im Hintergrund sichtbar bleiben */
 }
 
 .auth-form {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 40px;          /* Etwas mehr Platz im Inneren */
-  width: 100%;
-  max-width: 400px;       /* Maximale Breite des Formulars */
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
-  backdrop-filter: blur(10px); /* Glas-Effekt passend zur Navbar */
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 40px; /* Etwas mehr Platz im Inneren */
+    width: 100%;
+    max-width: 400px; /* Maximale Breite des Formulars */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    backdrop-filter: blur(10px); /* Glas-Effekt passend zur Navbar */
 }
 
 .auth-form h2 {
-  margin: 0 0 10px 0;
-  text-align: center;
-  font-size: 1.8rem;
+    margin: 0 0 10px 0;
+    text-align: center;
+    font-size: 1.8rem;
 }
 
 .auth-form input {
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--secondary-bg);
-  color: var(--text-color);
-  font-size: 1rem;
-  transition: border-color 0.2s;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--secondary-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: border-color 0.2s;
 }
 
 .auth-form input:focus {
-  outline: none;
-  border-color: var(--primary-btn-bg); /* Highlight bei Klick */
+    outline: none;
+    border-color: var(--primary-btn-bg); /* Highlight bei Klick */
 }
 
 .auth-form button {
-  margin-top: 10px;
-  /* Nutzt automatisch die Stile von .primary-btn, falls die Klasse vergeben ist */
+    margin-top: 10px;
+    /* Nutzt automatisch die Stile von .primary-btn, falls die Klasse vergeben ist */
 }
 
 .google-btn-modern {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: var(--card-bg);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-  padding: 12px 28px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
 }
 
 .google-btn-modern:hover {
-  background: var(--secondary-bg);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    background: var(--secondary-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 .auth-error {
-  background-color: var(--error-color);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
-  font-size: 0.85rem;
-  margin-top: 10px;
+    background-color: var(--error-color);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.85rem;
+    margin-top: 10px;
 }
 
 hr {
-  border: 0;
-  border-top: 1px solid var(--border-color);
-  margin: 10px 0;
-  width: 100%;
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 10px 0;
+    width: 100%;
 }
 
 /* =========================================
    10. RESPONSIVE
    ========================================= */
 @media (max-width: 768px) {
-  .user-email { display: none; }
-  .navbar-content { padding: 0 10px; }
-  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-  .content-header h1 { font-size: 1.5rem; }
+    .user-email {
+        display: none;
+    }
+
+    .navbar-content {
+        padding: 0 10px;
+    }
+
+    .photo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+
+    .content-header h1 {
+        font-size: 1.5rem;
+    }
+}
+
+/* =========================================
+   11. ALBUM TABS (Meine Alben / Mit mir geteilt)
+   ========================================= */
+.album-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    background: var(--secondary-bg);
+    padding: 6px;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--secondary-text);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.tab-btn:hover {
+    color: var(--text-color);
+    background: var(--card-bg);
+}
+
+.tab-btn.active {
+    background: var(--card-bg);
+    color: var(--primary-btn-bg);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================
+   12. SHARE MODAL
+   ========================================= */
+.share-modal {
+    max-width: 520px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.share-album-title {
+    color: var(--secondary-text);
+    margin: -10px 0 1.5rem 0;
+    font-style: italic;
+    font-size: 0.95rem;
+}
+
+/* Einladungs-Formular */
+.invite-form {
+    margin-bottom: 1.5rem;
+}
+
+.invite-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.invite-row input[type="email"] {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    background: var(--secondary-bg);
+    color: var(--text-color);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.invite-row input[type="email"]:focus {
+    outline: none;
+    border-color: var(--primary-btn-bg);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.invite-row select {
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: var(--secondary-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    min-width: 140px;
+}
+
+.invite-row select:focus {
+    outline: none;
+    border-color: var(--primary-btn-bg);
+}
+
+.invite-row .primary-btn {
+    white-space: nowrap;
+    padding: 12px 24px;
+}
+
+/* Feedback Messages */
+.share-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    font-size: 0.9rem;
+}
+
+.share-success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   13. PERMISSIONS LIST
+   ========================================= */
+.permissions-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.permissions-section h3 {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.permissions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.permission-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--secondary-bg);
+    transition: background 0.2s;
+}
+
+.permission-item:hover {
+    background: var(--border-color);
+}
+
+.permission-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-btn-bg) 0%, #2563eb 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.permission-user .user-email {
+    font-size: 0.8rem;
+    color: var(--secondary-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.permission-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.remove-btn {
+    background: transparent;
+    border: none;
+    color: var(--secondary-text);
+    cursor: pointer;
+    padding: 6px 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    opacity: 0.6;
+}
+
+.remove-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+    opacity: 1;
+}
+
+/* =========================================
+   14. ROLE BADGES
+   ========================================= */
+.role-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.role-badge.owner {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #78350f;
+}
+
+.role-badge.editor {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    color: white;
+}
+
+.role-badge.viewer {
+    background: var(--secondary-bg);
+    color: var(--secondary-text);
+    border: 1px solid var(--border-color);
+}
+
+/* Inline Role Text (Album Cards) */
+.role-inline {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.role-inline.owner {
+    color: #f59e0b;
+}
+
+.role-inline.editor {
+    color: #3b82f6;
+}
+
+.role-inline.viewer {
+    color: var(--secondary-text);
+}
+
+/* =========================================
+   15. SHARE INFO BOX
+   ========================================= */
+.share-info-box {
+    margin-top: 1.5rem;
+    padding: 16px;
+    background: var(--secondary-bg);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+}
+
+.share-info-box p {
+    margin: 6px 0;
+    color: var(--secondary-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.share-info-box strong {
+    color: var(--text-color);
+}
+
+/* =========================================
+   16. SHARE BUTTON (im Album Header)
+   ========================================= */
+.share-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-btn-bg);
+    background: transparent;
+    color: var(--primary-btn-bg);
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.share-btn:hover {
+    background: var(--primary-btn-bg);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+/* Header Actions Container */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* =========================================
+   17. MODAL CLOSE BUTTON
+   ========================================= */
+.modal-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--secondary-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.modal-close-btn:hover {
+    background: var(--error-color);
+    color: white;
+    border-color: var(--error-color);
+    transform: rotate(90deg);
+}
+
+/* Modal Content needs position relative */
+.modal-content {
+    position: relative;
+}
+
+/* =========================================
+   18. EMPTY STATES & MISC
+   ========================================= */
+.no-permissions {
+    color: var(--secondary-text);
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-text {
+    color: var(--secondary-text);
+    text-align: center;
+    padding: 20px;
+}
+
+/* Album Info Text mit Role */
+.album-info p {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+    margin: 8px 0 0 0;
+}
+
+.album-info {
+    padding: 16px;
+}
+
+.album-info h3 {
+    margin: 0 0 4px 0;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   19. ACTION BUTTONS (Album Cards)
+   ========================================= */
+.action-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+    background: var(--secondary-bg);
+}
+
+.action-btn.delete:hover {
+    background: var(--error-color);
+    border-color: var(--error-color);
+}
+
+/* =========================================
+   20. ERROR MESSAGE (General)
+   ========================================= */
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.error-message::before {
+    content: "⚠️";
+}
+
+/* =========================================
+   21. RESPONSIVE ADJUSTMENTS FOR SHARING
+   ========================================= */
+@media (max-width: 768px) {
+    .album-tabs {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tab-btn {
+        flex: 1;
+        text-align: center;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .invite-row {
+        flex-direction: column;
+    }
+
+    .invite-row input[type="email"],
+    .invite-row select,
+    .invite-row .primary-btn {
+        width: 100%;
+    }
+
+    .share-modal {
+        max-width: 95%;
+        padding: 20px;
+    }
+
+    .permission-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .permission-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .share-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* =========================================
+   22. DARK THEME SPECIFIC OVERRIDES
+   ========================================= */
+.dark-theme .share-error {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.dark-theme .share-success {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.dark-theme .user-avatar {
+    background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
+}
+
+.dark-theme .role-badge.viewer {
+    background: var(--secondary-bg);
+    border-color: var(--border-color);
+}
+
+.dark-theme .action-btn {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+.dark-theme .modal-close-btn {
+    background: var(--secondary-bg);
+    border-color: var(--border-color);
 }
