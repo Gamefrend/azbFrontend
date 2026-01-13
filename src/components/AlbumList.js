@@ -8,7 +8,7 @@ const AlbumList = ({ user }) => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [newAlbumName, setNewAlbumName] = useState("");
-  const [activeTab, setActiveTab] = useState('my');  // ← NEU: Tab-State
+  const [activeTab, setActiveTab] = useState('my'); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,140 +39,94 @@ const AlbumList = ({ user }) => {
     }
   };
 
-  const handleDelete = async (e, id) => {
-    e.stopPropagation();
-    if (window.confirm("Dieses Album wirklich unwiderruflich löschen?")) {
-      try {
-        await api.deleteAlbum(id);
-        setAlbums(albums.filter(a => a.id !== id));
-      } catch (err) {
-        setError("Löschen fehlgeschlagen");
-      }
-    }
-  };
+  // Filter-Logik für die Tabs
+  const myAlbums = albums.filter(a => a.role === 'owner' && !a.is_event);
+  const sharedWithMe = albums.filter(a => a.role !== 'owner' && !a.is_event);
+  const socialEvents = albums.filter(a => a.is_event); // Basierend auf dem neuen DB-Feld
 
-  const handleRename = async (e, id, oldTitle) => {
-    e.stopPropagation();
-    const newName = prompt("Neuer Name für das Album:", oldTitle);
-    if (newName && newName.trim() !== "" && newName !== oldTitle) {
-      try {
-        await api.updateAlbum(id, { title: newName });
-        setAlbums(albums.map(a => a.id === id ? { ...a, title: newName } : a));
-      } catch (err) {
-        setError("Umbenennen fehlgeschlagen");
-      }
-    }
-  };
-
-  // NEU: Alben filtern
-  const myAlbums = albums.filter(a => a.role === 'owner');
-  const sharedWithMe = albums.filter(a => a.role !== 'owner');
-  const displayedAlbums = activeTab === 'my' ? myAlbums : sharedWithMe;
+  const displayedAlbums = 
+    activeTab === 'my' ? myAlbums : 
+    activeTab === 'shared' ? sharedWithMe : socialEvents;
 
   if (loading) return <main className="content"><div className="loader">Lade Alben...</div></main>;
 
   return (
-      <main className="content">
-        <header className="content-header">
-          <h1>Alben</h1>
-          <button className="primary-btn" onClick={() => setShowModal(true)}>
-            + Neues Album
-          </button>
-        </header>
+    <main className="content">
+      <header className="content-header">
+        <h1>{activeTab === 'events' ? 'Social Events' : 'Deine Alben'}</h1>
+        <button className="primary-btn" onClick={() => setShowModal(true)}>
+          + Neues Album
+        </button>
+      </header>
 
-        {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message">{error}</div>}
 
-        {/* NEU: Tab-Navigation */}
-        <div className="album-tabs">
-          <button
-              className={`tab-btn ${activeTab === 'my' ? 'active' : ''}`}
-              onClick={() => setActiveTab('my')}
-          >
-            📁 Meine Alben ({myAlbums.length})
-          </button>
-          <button
-              className={`tab-btn ${activeTab === 'shared' ? 'active' : ''}`}
-              onClick={() => setActiveTab('shared')}
-          >
-            🔗 Mit mir geteilt ({sharedWithMe.length})
-          </button>
-        </div>
+      <div className="album-tabs">
+        <button className={`tab-btn ${activeTab === 'my' ? 'active' : ''}`} onClick={() => setActiveTab('my')}>
+          📁 Meine Alben ({myAlbums.length})
+        </button>
+        <button className={`tab-btn ${activeTab === 'shared' ? 'active' : ''}`} onClick={() => setActiveTab('shared')}>
+          🔗 Geteilt ({sharedWithMe.length})
+        </button>
+        <button className={`tab-btn ${activeTab === 'events' ? 'active' : ''}`} onClick={() => setActiveTab('events')}>
+          🔥 Social Events ({socialEvents.length})
+        </button>
+      </div>
 
-        <div className="album-grid">
-          {displayedAlbums.length > 0 ? (
-              displayedAlbums.map(album => (
-                  <div key={album.id} className="album-card" onClick={() => navigate(`/album/${album.id}`)}>
-                    {/* Aktionen nur für Owner */}
-                    {album.role === 'owner' && (
-                        <div className="album-actions">
-                          <button className="action-btn" onClick={(e) => handleRename(e, album.id, album.title)} title="Umbenennen">✏️</button>
-                          <button className="action-btn delete" onClick={(e) => handleDelete(e, album.id)} title="Löschen">🗑️</button>
-                        </div>
-                    )}
-
-                    <div className="album-placeholder">
-                      {album.role === 'owner' ? '📁' : '🔗'}
-                    </div>
-                    <div className="album-info">
-                      <h3>{album.title}</h3>
-                      <p>
-                        {album.media_count || 0} Fotos •
-                        <span className={`role-inline ${album.role}`}>
-                    {album.role === 'owner' ? ' 👑 Owner' :
-                        album.role === 'editor' ? ' ✏️ Editor' : ' 👁️ Viewer'}
-                  </span>
-                      </p>
-                    </div>
-                  </div>
-              ))
-          ) : (
-              <div className="empty-state">
-                <p className="no-data">
-                  {activeTab === 'my'
-                      ? "Du hast noch keine eigenen Alben."
-                      : "Noch keine Alben mit dir geteilt."}
-                </p>
+      <div className="album-grid">
+        {displayedAlbums.length > 0 ? (
+          displayedAlbums.map(album => (
+            <div key={album.id} 
+                 className={`album-card ${album.is_event ? 'event-card' : ''}`} 
+                 onClick={() => navigate(`/album/${album.id}`)}>
+              
+              {album.is_event && <div className="event-badge">LIVE EVENT</div>}
+              
+              <div className="album-placeholder">
+                {album.is_event ? '🔥' : (album.role === 'owner' ? '📁' : '🔗')}
               </div>
-          )}
-        </div>
+              <div className="album-info">
+                <h3>{album.title}</h3>
+                <p>{album.media_count || 0} Beiträge</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="empty-state">
+            <p className="no-data">Keine Alben in dieser Kategorie gefunden.</p>
+          </div>
+        )}
+      </div>
 
-        {/* Modal */}
-       {showModal && (
+      {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content modern-modal" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close-btn" onClick={() => setShowModal(false)}>✕</button>
-            
             <div className="modal-header">
               <h2>Neues Album</h2>
-              <p>Gib deinem Album einen Namen, um deine Medien zu organisieren.</p>
+              <p>Erstelle einen Ort für deine gemeinsamen Erinnerungen.</p>
             </div>
-
             <form onSubmit={createAlbum}>
               <div className="input-group">
-                <label>Album Name</label>
+                <label>Name des Albums</label>
                 <input
                   type="text"
-                  placeholder="z.B. Urlaub 2025"
+                  placeholder="z.B. Sommerfest 2025"
                   value={newAlbumName}
                   onChange={(e) => setNewAlbumName(e.target.value)}
                   autoFocus
                   className="modern-input"
                 />
               </div>
-              
               <div className="modal-buttons">
-                <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">
-                  Abbrechen
-                </button>
-                <button type="submit" className="confirm-btn" disabled={!newAlbumName.trim()}>
-                  Album erstellen
-                </button>
+                <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">Abbrechen</button>
+                <button type="submit" className="confirm-btn" disabled={!newAlbumName.trim()}>Erstellen</button>
               </div>
             </form>
           </div>
         </div>
       )}
-      </main>
+    </main>
   );
 };
 
