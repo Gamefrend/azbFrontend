@@ -8,7 +8,8 @@ import Auth from './auth';
 import AlbumList from './components/AlbumList';
 import AlbumView from './components/AlbumView';
 import ParticleBackground from './components/RainDropsBackground'; // Import der three.js Komponente
-import { useDarkMode } from './hooks/useDarkMode'; // Import des Dark Mode Hooks
+import { useDarkMode } from './hooks/useDarkMode';
+import EventView from "./components/EventView"; // Import des Dark Mode Hooks
 
 function App() {
   const [user, setUser] = useState(null);
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/" element={<AlbumList user={user} />} />
                 <Route path="/album/:albumId" element={<AlbumView user={user} />} />
                 <Route path="*" element={<Navigate to="/" />} />
+                <Route path="/event/:eventId" element={<EventView user={user} />} />
               </Routes>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { auth } from '../config/firebase-config';
+import {auth} from '../config/firebase-config';
 
 const API_URL = 'https://api-service-898583273277.europe-west3.run.app/';
 
@@ -38,7 +38,7 @@ export const api = {
     // ==================== ALBUMS ====================
     async getAlbums() {
         const headers = await getHeaders();
-        const res = await fetch(`${API_URL}/albums`, { headers });
+        const res = await fetch(`${API_URL}/albums`, {headers});
         if (!res.ok) throw new Error('Laden fehlgeschlagen');
         return res.json();
     },
@@ -48,7 +48,7 @@ export const api = {
         const res = await fetch(`${API_URL}/albums`, {
             method: 'POST',
             headers,
-            body: JSON.stringify({ title, description }),
+            body: JSON.stringify({title, description}),
         });
         if (!res.ok) throw new Error('Erstellen fehlgeschlagen');
         return res.json();
@@ -56,7 +56,7 @@ export const api = {
 
     async getAlbum(albumId) {
         const headers = await getHeaders();
-        const res = await fetch(`${API_URL}/albums/${albumId}`, { headers });
+        const res = await fetch(`${API_URL}/albums/${albumId}`, {headers});
         if (!res.ok) throw new Error('Laden fehlgeschlagen');
         return res.json();
     },
@@ -85,7 +85,7 @@ export const api = {
     // ==================== PERMISSIONS ====================
     async getPermissions(albumId) {
         const headers = await getHeaders();
-        const res = await fetch(`${API_URL}/albums/${albumId}/permissions`, { headers });
+        const res = await fetch(`${API_URL}/albums/${albumId}/permissions`, {headers});
         if (!res.ok) throw new Error('Laden fehlgeschlagen');
         return res.json();
     },
@@ -95,7 +95,7 @@ export const api = {
         const res = await fetch(`${API_URL}/albums/${albumId}/permissions`, {
             method: 'POST',
             headers,
-            body: JSON.stringify({ email, role }),
+            body: JSON.stringify({email, role}),
         });
         if (!res.ok) {
             const error = await res.json();
@@ -117,7 +117,7 @@ export const api = {
     // ==================== MEDIA ====================
     async getMedia(albumId) {
         const headers = await getHeaders();
-        const res = await fetch(`${API_URL}/albums/${albumId}/media`, { headers });
+        const res = await fetch(`${API_URL}/albums/${albumId}/media`, {headers});
         if (!res.ok) throw new Error('Laden fehlgeschlagen');
         return res.json();
     },
@@ -151,6 +151,60 @@ export const api = {
             headers
         });
         if (!res.ok) throw new Error('Löschen fehlgeschlagen');
+        return res.json();
+    },
+
+    // ==================== EVENTS ====================
+    async getEvents() {
+        const headers = await getHeaders();
+        const res = await fetch(`${API_URL}/events`, {headers});
+        if (!res.ok) throw new Error('Events laden fehlgeschlagen');
+        return res.json();
+    },
+
+    async createEvent(title, description = null) {
+        const headers = await getHeaders();
+        const res = await fetch(`${API_URL}/events`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({title, description}),
+        });
+        if (!res.ok) throw new Error('Event erstellen fehlgeschlagen');
+        return res.json();
+    },
+
+    async getEvent(eventId) {
+        const headers = await getHeaders();
+        const res = await fetch(`${API_URL}/events/${eventId}`, {headers});
+        if (!res.ok) throw new Error('Event laden fehlgeschlagen');
+        return res.json();
+    },
+
+    async uploadEventMedia(eventId, files) {
+        const user = auth.currentUser;
+        if (!user) throw new Error('Nicht eingeloggt');
+        const token = await user.getIdToken();
+
+        const formData = new FormData();
+        for (const file of files) {
+            formData.append('images', file);
+        }
+
+        const res = await fetch(`${API_URL}/events/${eventId}/upload`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData,
+        });
+        if (!res.ok) throw new Error('Upload fehlgeschlagen');
+        return res.json();
+    },
+
+    async getEventMedia(eventId) {
+        const headers = await getHeaders();
+        const res = await fetch(`${API_URL}/events/${eventId}/media`, {headers});
+        if (!res.ok) throw new Error('Medien laden fehlgeschlagen');
         return res.json();
     },
 };
