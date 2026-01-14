@@ -62,6 +62,26 @@ const EventView = ({ user }) => {
         }
     };
 
+    // Download Funktion (nutzt Blob für direkten Download)
+    const handleDownload = async (e, url, filename) => {
+        e.stopPropagation(); 
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = filename || `event-download-${Date.now()}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error("Download fehlgeschlagen:", error);
+            window.open(url, '_blank');
+        }
+    };
+
     if (loading) return <main className="content"><div className="loader">Lade Event...</div></main>;
 
     const isOwner = event?.role === 'owner';
@@ -117,14 +137,24 @@ const EventView = ({ user }) => {
 
                                 {/* Uploader Info */}
                                 <div className="media-uploader-info">
-                  <span className="uploader-avatar">
-                    {(item.uploader_name || item.uploader_email || '?')[0].toUpperCase()}
-                  </span>
+                                    <span className="uploader-avatar">
+                                        {(item.uploader_name || item.uploader_email || '?')[0].toUpperCase()}
+                                    </span>
                                     <span className="uploader-name">{item.uploader_name || item.uploader_email?.split('@')[0] || 'Anonym'}</span>
                                 </div>
 
                                 <div className="photo-overlay">
                                     <span className="zoom-label">{isVideoFile(item.url) ? '▶ Abspielen' : '🔍 Vollbild'}</span>
+                                    
+                                    {/* Download Button Grid */}
+                                    <button 
+                                        className="download-mini-btn" 
+                                        onClick={(e) => handleDownload(e, item.url, item.filename)}
+                                        title="Herunterladen"
+                                    >
+                                        📥
+                                    </button>
+
                                     {(isOwner || item.uploader_uid === user?.uid) && (
                                         <button className="delete-mini-btn" onClick={(e) => handleDelete(e, item.id)}>✕</button>
                                     )}
@@ -160,12 +190,24 @@ const EventView = ({ user }) => {
                         </div>
                         <div className="lightbox-sidebar">
                             <div className="lightbox-uploader-info">
-                <span className="uploader-avatar large">
-                  {(selectedMedia.uploader_name || '?')[0].toUpperCase()}
-                </span>
+                                <span className="uploader-avatar large">
+                                    {(selectedMedia.uploader_name || '?')[0].toUpperCase()}
+                                </span>
                                 <span>{selectedMedia.uploader_name || selectedMedia.uploader_email?.split('@')[0]}</span>
                             </div>
+                            
                             <MediaInteractions media={selectedMedia} user={user} />
+                            
+                            {/* NEU: Download Button in der Sidebar */}
+                            <div style={{padding: '20px'}}>
+                                <button 
+                                    className="back-btn" 
+                                    style={{width: '100%', justifyContent: 'center'}}
+                                    onClick={(e) => handleDownload(e, selectedMedia.url, selectedMedia.filename)}
+                                >
+                                    📥 Datei herunterladen
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

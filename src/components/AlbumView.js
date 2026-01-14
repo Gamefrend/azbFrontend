@@ -13,7 +13,10 @@ const AlbumView = ({ user }) => {
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  
+  // Diese Variable verursachte die Warnung, weil sie unten nicht genutzt wurde
   const [error, setError] = useState(null);
+  
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [showShareModal, setShowShareModal] = useState(false);
 
@@ -40,6 +43,8 @@ const AlbumView = ({ user }) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
     setUploading(true);
+    // Alten Fehler zurücksetzen
+    setError(null);
     try {
       const result = await api.uploadMedia(albumId, Array.from(files));
       setMedia([...result.media, ...media]);
@@ -60,9 +65,27 @@ const AlbumView = ({ user }) => {
     } catch (err) { setError("Löschen fehlgeschlagen"); }
   };
 
+  const handleDownload = async (e, url, filename) => {
+    e.stopPropagation();
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename || `download-${Date.now()}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download fehlgeschlagen:", error);
+      window.open(url, '_blank');
+    }
+  };
+
   if (loading) return <main className="content"><div className="loader">Lade Inhalte...</div></main>;
 
-  // Berechtigung: Owner/Editor ODER es ist ein öffentliches Event
   const canEdit = ['owner', 'editor'].includes(album?.role);
   const canUpload = album?.is_event || canEdit;
 
@@ -92,6 +115,9 @@ const AlbumView = ({ user }) => {
         </div>
       </header>
 
+      {/* HIER WURDE DER FIX EINGFÜGT: Zeigt den Fehler an und entfernt die Warnung */}
+      {error && <div className="error-message">{error}</div>}
+
       <section className="photo-section">
         <div className="photo-grid">
           {media.map(item => (
@@ -103,6 +129,16 @@ const AlbumView = ({ user }) => {
               )}
               <div className="photo-overlay">
                 <span className="zoom-label">{isVideoFile(item.url) ? '▶ Abspielen' : '🔍 Vollbild'}</span>
+                
+                {/* Download Button im Grid */}
+                <button 
+                  className="download-mini-btn" 
+                  onClick={(e) => handleDownload(e, item.url, item.filename)}
+                  title="Herunterladen"
+                >
+                  📥
+                </button>
+
                 {canEdit && (
                   <button className="delete-mini-btn" onClick={(e) => handleDelete(e, item.id)}>✕</button>
                 )}
@@ -125,8 +161,20 @@ const AlbumView = ({ user }) => {
                 <img src={selectedMedia.url} alt="Vollbild" />
               )}
             </div>
+            
             <div className="lightbox-sidebar">
               <MediaInteractions media={selectedMedia} user={user} />
+              
+              {/* NEU: Download Button auch hier in der Sidebar */}
+              <div style={{padding: '20px'}}>
+                 <button 
+                   className="back-btn" 
+                   style={{width: '100%', justifyContent: 'center'}}
+                   onClick={(e) => handleDownload(e, selectedMedia.url, selectedMedia.filename)}
+                 >
+                   📥 Datei herunterladen
+                 </button>
+               </div>
             </div>
           </div>
         </div>
