@@ -1,0 +1,109 @@
+\section{Identity and Access Management (IAM)}
+
+\subsection{Ziel des IAM-Konzepts}
+
+Zur Absicherung der Cloud-Infrastruktur wurde Google Cloud Identity and Access
+Management (IAM) eingesetzt. Ziel ist es, Zugriffe auf Cloud-Ressourcen
+granular zu steuern und sicherzustellen, dass jede Komponente der Anwendung
+nur über die minimal notwendigen Berechtigungen verfügt.
+
+IAM bildet damit die Grundlage für:
+\begin{itemize}
+    \item kontrollierten Zugriff auf Cloud-Run-Services,
+    \item abgesicherte Datenbank- und Storage-Zugriffe,
+    \item Trennung von Frontend, Backend und Infrastruktur,
+    \item Nachvollziehbarkeit von Zugriffen über Audit-Logs.
+\end{itemize}
+
+\subsection{Aufruf des IAM-Bereichs}
+
+Die Konfiguration der Zugriffsrechte erfolgt über den Bereich
+\textit{IAM und Verwaltung} innerhalb der Google Cloud Console.
+Nach Auswahl des Projekts wird der Menüpunkt \textit{IAM} geöffnet.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/IAM1.png}
+    \caption{Navigation zum IAM-Bereich in der Google Cloud Console}
+\end{figure}
+
+\subsection{Vergabe von Zugriffsrechten}
+
+Innerhalb der IAM-Übersicht können Hauptkonten, Gruppen und Dienstkonten
+mit spezifischen Rollen ausgestattet werden. Die Vergabe neuer Berechtigungen
+erfolgt über die Funktion \textit{Zugriffsrechte erteilen}.
+
+Dabei wird zunächst ein Hauptkonto oder Dienstkonto ausgewählt und
+anschließend eine oder mehrere Rollen zugewiesen, die definieren,
+welche Aktionen auf Projektebene erlaubt sind.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/IAM2.png}
+    \caption{Erteilen von Zugriffsrechten über IAM}
+\end{figure}
+
+\subsection{Service Accounts für Backend-Services}
+
+Für die Backend-Services wurde ein dediziertes Dienstkonto
+(\textit{api-service}) verwendet. Dieses Dienstkonto wird von den
+Cloud-Run-Services genutzt, um kontrolliert auf weitere Cloud-Ressourcen
+zugreifen zu können.
+
+Dem Dienstkonto wurden gezielt Rollen zugewiesen, unter anderem:
+\begin{itemize}
+    \item Zugriff auf Cloud Storage,
+    \item Zugriff auf Cloud SQL,
+    \item Schreibrechte für Logs,
+    \item Zugriff auf Secrets im Secret Manager.
+\end{itemize}
+
+Durch diese Trennung wird vermieden, dass Cloud-Run-Services mit
+übergeordneten oder globalen Rechten ausgeführt werden.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/IAM3.png}
+    \caption{Zugewiesene Rollen für das Service Account des API-Services}
+\end{figure}
+
+\subsection{Einbindung des Service Accounts in Cloud Run}
+
+Das konfigurierte Dienstkonto wird direkt dem Cloud-Run-Service
+zugewiesen. Dies erfolgt bei der Bereitstellung oder Aktualisierung
+eines Services im Reiter \textit{Sicherheit}.
+
+Durch diese Zuweisung werden alle Zugriffe des Cloud-Run-Services
+automatisch im Kontext des gewählten Dienstkontos ausgeführt.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/IAM4.png}
+    \caption{Zuweisung des Service Accounts zu einem Cloud-Run-Service}
+\end{figure}
+
+\subsection{Revisionen und sichere Aktualisierung}
+
+Jede Änderung an der Konfiguration eines Cloud-Run-Services führt
+zur Erstellung einer neuen Revision. Diese Revision enthält neben
+dem Container-Image auch die Sicherheits- und IAM-Einstellungen.
+
+Durch dieses Revisionsmodell bleibt jederzeit nachvollziehbar,
+welche Konfiguration aktiv ist und welche Berechtigungen verwendet werden.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/IAM5.png}
+    \caption{Bereitstellung einer neuen Revision mit aktualisierten Sicherheitsparametern}
+\end{figure}
+
+\subsection{Sicherheitsbewertung}
+
+Durch den Einsatz von IAM in Kombination mit dedizierten Service Accounts
+wird das Prinzip der minimalen Rechtevergabe (Least Privilege) umgesetzt.
+Frontend-Komponenten besitzen keinerlei direkte Zugriffsrechte auf
+Cloud-Ressourcen.
+
+Alle sicherheitskritischen Operationen werden ausschließlich durch
+Backend-Services durchgeführt, die klar definierte Rollen und Berechtigungen
+besitzen.

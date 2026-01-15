@@ -1,0 +1,102 @@
+\section{Firebase Authentication}
+
+\subsection{Zugriff auf den Authentication-Bereich}
+
+Die Konfiguration der Benutzerverwaltung erfolgt über die Firebase Console.
+Nach Auswahl des Projekts \textit{Doku} wird im linken Navigationsmenü der
+Bereich \textit{Authentication} ausgewählt. Dieser Bereich dient als zentrale
+Verwaltungsoberfläche für alle Aspekte der Authentifizierung.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/Auth1.png}
+    \caption{Aufruf des Authentication-Bereichs in der Firebase Console}
+\end{figure}
+
+\subsection{Übersicht der Nutzerverwaltung}
+
+Nach dem Aufruf des Authentication-Moduls wird standardmäßig der Reiter
+\textit{Nutzer} angezeigt. In diesem Bereich verwaltet Firebase alle registrierten
+Benutzerkonten der Anwendung.
+
+Für jeden Nutzer speichert Firebase unter anderem:
+\begin{itemize}
+    \item den verwendeten Authentifizierungsanbieter,
+    \item den Zeitpunkt der Erstellung des Kontos,
+    \item den Zeitpunkt der letzten Anmeldung,
+    \item eine eindeutige Benutzer-ID (UID).
+\end{itemize}
+
+Die UID dient als stabiler Identifikator und wird für die Zuordnung von
+benutzerspezifischen Daten sowie für Autorisierungsentscheidungen in
+nachgelagerten Services verwendet.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/Auth2.png}
+    \caption{Nutzerübersicht innerhalb von Firebase Authentication}
+\end{figure}
+
+\subsection{Konfiguration der Anmeldemethoden}
+
+Die verfügbaren Anmeldemethoden werden im Reiter \textit{Anmeldemethode}
+konfiguriert. In diesem Projekt wurden bewusst mehrere Authentifizierungsanbieter
+aktiviert, um unterschiedliche Anmeldewege zu ermöglichen.
+
+Konkret wurden folgende Anbieter eingerichtet:
+\begin{itemize}
+    \item \textbf{E-Mail-Adresse / Passwort} als klassische Form der Anmeldung,
+    \item \textbf{Google} als externer OAuth-2.0-Anbieter.
+\end{itemize}
+
+Die Aktivierung erfolgt über die Schaltfläche \textit{Neuen Anbieter hinzufügen}.
+Jeder Anbieter kann unabhängig voneinander aktiviert oder deaktiviert werden.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/Auth3.png}
+    \caption{Auswahl und Aktivierung der Anmeldemethoden}
+\end{figure}
+
+\subsection{Registrierung der Web-Anwendung}
+
+Um Firebase Authentication im Frontend nutzen zu können, wurde eine Web-Anwendung
+im Firebase-Projekt registriert. Dieser Schritt ist notwendig, damit das Frontend
+eindeutig dem Projekt zugeordnet werden kann.
+
+Nach der Registrierung stellt Firebase eine projektspezifische Konfiguration zur
+Verfügung, die unter anderem folgende Parameter enthält:
+\begin{itemize}
+    \item \texttt{apiKey}
+    \item \texttt{authDomain}
+    \item \texttt{projectId}
+    \item \texttt{storageBucket}
+    \item \texttt{appId}
+\end{itemize}
+
+Diese Konfigurationsdaten werden im Frontend verwendet, um das Firebase SDK zu
+initialisieren und eine Verbindung zu den Firebase-Diensten herzustellen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/Auth4.png}
+    \caption{Firebase SDK Konfiguration für die Web-Anwendung}
+\end{figure}
+
+\subsection{Einbindung des Firebase SDK}
+
+Für die Einbindung von Firebase im Frontend wurde das modulare JavaScript SDK
+verwendet. Die Installation erfolgt über den Node Package Manager (npm).
+Nach der Initialisierung des SDK kann die Authentication-Funktionalität direkt
+im Client genutzt werden.
+
+Die Authentifizierung erfolgt vollständig über Firebase, wodurch keine
+Passwörter oder sicherheitskritischen Zugangsdaten im eigenen Backend
+gespeichert oder verarbeitet werden müssen.
+
+\subsection{Zusammenfassung}
+
+Firebase Authentication übernimmt in diesem Projekt die vollständige
+Benutzerverwaltung und Authentifizierung. Durch die Nutzung eines externen
+3rd-Party-Dienstes wird eine sichere, skalierbare und wartbare Lösung
+bereitgestellt, die sich nahtlos in weitere Google-Cloud-Dienste integrieren lässt.

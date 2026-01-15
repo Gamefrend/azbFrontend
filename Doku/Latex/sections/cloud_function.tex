@@ -1,0 +1,101 @@
+\section{Backend-Services mit Cloud Run Functions}
+
+\subsection{Ziel der Backend-Funktionalität}
+
+Zur Umsetzung der serverseitigen Logik wurde Google Cloud Run in Verbindung
+mit Cloud Functions eingesetzt. Ziel ist es, dem Frontend eine klar definierte
+REST-Schnittstelle bereitzustellen, über die sicher auf Anwendungsdaten,
+Datenbanken und Cloud-Storage-Ressourcen zugegriffen werden kann.
+
+Direkte Zugriffe aus dem Frontend auf Datenbank oder Storage werden dabei
+bewusst vermieden. Sämtliche Datenmanipulationen erfolgen ausschließlich
+über die bereitgestellten Backend-Services.
+
+\subsection{Aufruf von Cloud Run in der Google Cloud Console}
+
+Die Erstellung und Verwaltung der Backend-Services erfolgt über die
+Google Cloud Console. Nach Auswahl des Projekts wird im Navigationsmenü
+der Dienst \textit{Cloud Run} aufgerufen. Innerhalb dieses Bereichs werden
+alle laufenden Services zentral angezeigt und verwaltet.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/Function1.png}
+    \caption{Navigation zu Cloud Run innerhalb der Google Cloud Console}
+\end{figure}
+
+\subsection{Übersicht der bestehenden Services}
+
+In der Serviceübersicht werden alle bereitgestellten Cloud-Run-Services
+angezeigt. Jeder Service stellt einen eigenständigen HTTP-Endpunkt dar
+und kann unabhängig von anderen Services skaliert, aktualisiert oder
+neu bereitgestellt werden.
+
+In diesem Projekt werden mehrere Services eingesetzt, darunter:
+\begin{itemize}
+    \item API-Services zur Verarbeitung von Anwendungsdaten,
+    \item Funktionen zum Upload von Dateien,
+    \item Funktionen zum Abruf von Inhalten aus dem Cloud Storage.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/Function2.png}
+    \caption{Übersicht der bestehenden Cloud-Run-Services}
+\end{figure}
+
+\subsection{Erstellung einer neuen Cloud-Run-Function}
+
+Zur Erstellung eines neuen Backend-Services wurde die Option
+\textit{Funktion schreiben} gewählt. Dabei handelt es sich um eine
+Cloud-Run-Function, die direkt über einen Inline-Editor erstellt und
+bereitgestellt werden kann.
+
+Während der Erstellung werden grundlegende Parameter definiert, darunter:
+\begin{itemize}
+    \item der eindeutige Name des Services,
+    \item die Region (z.\,B. europe-west3),
+    \item die verwendete Laufzeitumgebung (Node.js),
+    \item die Authentifizierungsart,
+    \item das Abrechnungsmodell.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/Function3.png}
+    \caption{Konfiguration eines neuen Cloud-Run-Services}
+\end{figure}
+
+\subsection{Authentifizierung, Skalierung und Abrechnung}
+
+Für den erstellten Service wurde ein öffentlicher HTTP-Endpunkt bereitgestellt,
+sodass das Frontend direkt mit der Cloud-Run-Function kommunizieren kann.
+Die Zugriffskontrolle kann optional über IAM oder Identity Tokens erweitert
+werden.
+
+Die Skalierung erfolgt automatisch auf Basis der eingehenden Anfragen.
+Die minimale Anzahl an Instanzen wurde auf null gesetzt, wodurch im
+Leerlauf keine Kosten entstehen.
+
+Die Abrechnung erfolgt anfragebasiert, sodass Kosten nur bei tatsächlicher
+Nutzung des Services anfallen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/Function4.png}
+    \caption{Abrechnungs- und Skalierungseinstellungen des Cloud-Run-Services}
+\end{figure}
+
+\subsection{Einbindung in die Gesamtarchitektur}
+
+Die Cloud-Run-Functions bilden die zentrale Schnittstelle zwischen
+Frontend, Datenbank und Cloud Storage. Das Frontend kommuniziert ausschließlich
+über diese Services mit dem Backend.
+
+Durch diese Architektur wird sichergestellt, dass:
+\begin{itemize}
+    \item keine direkten Datenbankzugriffe aus dem Client erfolgen,
+    \item sensible Operationen serverseitig kontrolliert werden,
+    \item die Anwendung horizontal skalierbar bleibt,
+    \item sicherheitsrelevante Logik zentral im Backend gebündelt ist.
+\end{itemize}
